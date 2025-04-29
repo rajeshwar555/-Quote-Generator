@@ -1,0 +1,16 @@
+{
+    "name": "Quote Generator",
+    "short_name": "Quotes",
+    "description": "Generate and share inspiring quotes",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4a90e2",
+    "icons": [
+        {
+            "src": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/svgs/solid/quote-left.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        }
+    ]
+} 

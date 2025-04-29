@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generator</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://api.quotable.io">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Initial loading state styles */
+        .quote-box {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .quote-box.loaded {
+            opacity: 1;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+    </style>
+    
+    <!-- Defer non-critical CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-quote-left"></i>
+            <span>Quote Generator</span>
+        </div>
+        <div class="nav-actions">
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="ja">日本語</option>
+                <option value="ne">नेपाली</option>
+            </select>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="search-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search quotes...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <div class="category-buttons">
+                <button class="category-btn active" data-category="all">All</button>
+                <button class="category-btn" data-category="friendship">Friendship</button>
+                <button class="category-btn" data-category="dreams">Dreams</button>
+                <button class="category-btn" data-category="courage">Courage</button>
+                <button class="category-btn" data-category="peace">Peace</button>
+                <button class="category-btn" data-category="love">Love</button>
+                <button class="category-btn" data-category="success">Success</button>
+                <button class="category-btn" data-category="wisdom">Wisdom</button>
+                <button class="category-btn" data-category="inspiration">Inspiration</button>
+                <button class="category-btn" data-category="motivation">Motivation</button>
+                <button class="category-btn" data-category="happiness">Happiness</button>
+                <button class="category-btn" data-category="life">Life</button>
+                <button class="category-btn" data-category="hope">Hope</button>
+                <button class="category-btn" data-category="faith">Faith</button>
+                <button class="category-btn" data-category="leadership">Leadership</button>
+                <button class="category-btn" data-category="sad">Sad</button>
+                <button class="category-btn" data-category="life-lessons">Life Lessons</button>
+                <button class="category-btn" data-category="funny">Funny</button>
+                <button class="category-btn" data-category="generator">Generator</button>
+            </div>
+        </section>
+
+        <section class="quote-section">
+            <div class="quote-box">
+                <div class="quote-content">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="quote-text"></p>
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <p class="quote-author"></p>
+                <div class="action-buttons">
+                    <button class="action-btn like">
+                        <i class="far fa-heart"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn share">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
+                    <button class="action-btn download">
+                        <i class="fas fa-download"></i>
+                        <span>Download</span>
+                    </button>
+                    <button class="action-btn save">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="generate-btn">
+                    <div class="loading-spinner"></div>
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Generate New Quote</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="popular-quotes-section">
+            <div class="section-header">
+                <h2 class="section-title">Popular Quotes</h2>
+                <button class="refresh-popular-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="popular-quotes-container">
+                <!-- Popular quotes will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2 class="section-title">FAQ</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I generate a new quote?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>There are several ways to get new quotes:</p>
+                        <ul>
+                            <li>Click the "Generate New Quote" button for a random quote</li>
+                            <li>Use the search bar to find quotes by keywords or authors</li>
+                            <li>Click on category buttons like "Love", "Motivation", "Wisdom", etc.</li>
+                            <li>Use the language selector to get quotes in different languages</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I save and manage my favorite quotes?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Managing your favorite quotes is easy:</p>
+                        <ul>
+                            <li>Click the heart icon (♥) to like a quote</li>
+                            <li>Use the bookmark icon to save quotes for later</li>
+                            <li>Your liked and saved quotes are stored locally on your device</li>
+                            <li>You can unlike or unsave quotes by clicking the same buttons again</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What languages are supported?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Currently, we support the following languages:</p>
+                        <ul>
+                            <li>English (English quotes and interface)</li>
+                            <li>हिंदी (Hindi quotes and interface)</li>
+                            <li>日本語 (Japanese quotes and interface)</li>
+                            <li>नेपाली (Nepali quotes and interface)</li>
+                        </ul>
+                        <p>To change the language, use the language selector in the top navigation bar.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How can I share quotes?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You have multiple sharing options:</p>
+                        <ul>
+                            <li>Click the "Share" button to copy the quote to your clipboard</li>
+                            <li>Use the "Download" button to save the quote as an image</li>
+                            <li>Share directly to social media (if available on your device)</li>
+                            <li>The shared quote will include both the text and author's name</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What are the different categories available?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer a wide range of categories including:</p>
+                        <ul>
+                            <li>Motivational and Inspirational quotes</li>
+                            <li>Love, Friendship, and Relationships</li>
+                            <li>Success and Leadership</li>
+                            <li>Life, Wisdom, and Philosophy</li>
+                            <li>Happiness and Peace</li>
+                            <li>Dreams and Hope</li>
+                            <li>Funny and Light-hearted quotes</li>
+                        </ul>
+                        <p>Simply click on any category button to see quotes from that category.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I use the search feature?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The search feature is versatile and easy to use:</p>
+                        <ul>
+                            <li>Type any keyword in the search bar</li>
+                            <li>Search by quote content, author name, or category</li>
+                            <li>Press Enter or click the search icon to search</li>
+                            <li>Results will show matching quotes in your selected language</li>
+                            <li>If no matches are found, try different keywords or check your spelling</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I change the theme?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can customize the app's appearance:</p>
+                        <ul>
+                            <li>Find the theme switcher at the bottom right corner</li>
+                            <li>Choose from Light, Dark, Sunset, Ocean, or Forest themes</li>
+                            <li>Your theme preference will be saved for future visits</li>
+                            <li>Each theme offers a unique color scheme and style</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="theme-switcher">
+            <div class="theme-option" data-theme="light"></div>
+            <div class="theme-option" data-theme="dark"></div>
+            <div class="theme-option" data-theme="sunset"></div>
+            <div class="theme-option" data-theme="ocean"></div>
+            <div class="theme-option" data-theme="forest"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by <a href="https://github.com/lukePeavey/quotable" target="_blank">Quotable API</a></p>
+    </footer>
+
+    <!-- Defer JavaScript loading -->
+    <script src="script.js" defer></script>
+</body>
+</html> 
